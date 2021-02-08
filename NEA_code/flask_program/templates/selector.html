@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+
+{%block content%} 
+    <form method="POST" action="">
+        <label for="companies">Choose a company to see the price sentiment graph for:</label>
+        <select name="companies" id="companies">
+        <option value="Microsoft">Microsoft</option>
+        <option value="Amazon">Amazon</option>
+        <option value="Facebook">Facebook</option>
+        <option value="Apple">Apple</option>
+        </select>
+        <br><br>
+        <input class="success button" type=submit value="submit">
+    </form>
+{%endblock%}

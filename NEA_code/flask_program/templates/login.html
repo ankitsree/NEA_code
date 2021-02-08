@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login page</title>
+    <h2>Welcome to the Microsoft stock price predictor</h2>
+    <form method="POST">
+        <div>
+            <label for="usern">Username:</label><br>
+            <input type="text" id="usern" name="username"><br>
+            <label for="passw">Password</label><br>
+            <input type="text" id="passw" name="Password"><br>
+            <input type="submit" value="Submit">
+        </div>
+        <div>
+            <p>If you are new user, click button to create an account</p>
+            <button onclick = "test()" type="button">Create account</button>
+            <div id="reg_user" style="display: none">
+                <label for="new_usern">Username:</label><br>
+                <input type="text" id="new_usern" name="new_username"><br>
+                <label for="new_passw">Password</label><br>
+                <input type="text" id="new_passw" name="new_Password"><br>
+                <label for="con_passw">Confirm Password</label><br>
+                <input type="text" id="con_passw" name="Password"><br>
+                <button type="button">Register</button>
+            </div>
+            <script>
+                function test() {
+                    var x = document.getElementById("reg_user");
+                    if (x.style.display === "none") {
+                    x.style.display = "block";
+                    } else {
+                    x.style.display = "none";
+                    }
+                }
+                </script>
+        </div>
+      </form>
+</head>
+<body>
+    
+</body>
+</html>

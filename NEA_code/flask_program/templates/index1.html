@@ -1,0 +1,12 @@
+{%extends "base.html"%}<!-- inherits and can add to base html, no space between % and }-->
+
+{%block head%} 
+<title>Home</title>
+{%endblock%}
+
+{%block content%} 
+<h1>Welcome to the stock price predictor using twitter</h1><br>
+<p>This stock price predictor uses tweets to predict the stock price of Microsoft by getting the sentiment of tweets .
+    <br> If the average sentiment is posivtive then the price may increase, conversely if the sentiment is negative then the price may decrease.
+    <br> Login to view the stock price and the sentiment over time or create an account to access the results.</p>
+{%endblock%}

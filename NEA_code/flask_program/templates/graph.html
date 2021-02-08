@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+
+{%block head%} 
+<title>Register</title>
+<script type="text/javascript" src="{{ cdn_json | safe }}"></script>
+
+
+{%endblock%}
+
+{%block content%} 
+    {{script1 | safe}}
+    {{div1 | safe}}
+    <p>Key: Green = Positive Sentiment<br> Blue = Neutral sentiment<br> Red=Negative sentiment</p>
+{%endblock%}
