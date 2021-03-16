@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+'''from flask import Flask, render_template
 
 app = Flask(__name__)#refers to this file
 
@@ -13,4 +13,7 @@ def user(name):
 
 if __name__ == "__main__":
     app.run(debug=True)
-
+'''
+from yahoo_fin import stock_info
+msft_price = stock_info.get_live_price('msft')
+print(msft_price)

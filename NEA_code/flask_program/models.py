@@ -9,7 +9,7 @@ def load_user(user_id):
 follows = db.Table('follows',
         db.Column('user_id',db.Integer,db.ForeignKey('user.id')),
         db.Column('company_id',db.Integer,db.ForeignKey('companies.id'))
-)
+) #link table for users and companies 
 
 
 class User(db.Model,UserMixin): #class for the model of the users database

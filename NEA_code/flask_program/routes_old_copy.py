@@ -17,7 +17,7 @@ def index():
     return render_template('index1.html')
 
 @app.route('/graph')
-def plot(): #function to create webpage to display graph
+def plot():
 
     selected_comp = request.args.get('selected_comp', None)
     #step 2, get company id of desired company 
@@ -25,42 +25,35 @@ def plot(): #function to create webpage to display graph
     Selected_comp_id = Company_object.id
     #step 3, use the company id to get the relevant tweet records
     List_of_tweets = Tweets.query.filter_by(company_id = Selected_comp_id).all()
-    list_of_dicts = []
-    for u in List_of_tweets:
-        data2 = u.__dict__
-        del data2['_sa_instance_state']
-        list_of_dicts.append(data2)
+    df = pd.read_csv('test2/sent_stock_data3.csv')
+    df['date_time']= pd.to_datetime(df['date_time'])
+    part = df
 
-    df2 = pd.DataFrame(list_of_dicts)
-    df2['date_time']= pd.to_datetime(df2['date_time'])
-    print(df2['date_time'])
-
-    source = ColumnDataSource(data=dict(x=df2.date_time,y=df2.stock_price,z=df2.avg_sentiment,a=df2.most_neg_tweet))
+    source = ColumnDataSource(data=dict(x=part.date_time,y=part.stock_price,z=part.avg_sentiment))
 
 
     plot = figure(title= "Stock price with sentiment graph", x_axis_label='Date', y_axis_label='Stock price',x_axis_type='datetime')
-    plot.line(x="x",y="y",source=source ,line_color='blue', line_width = 5)
+    plot.line(x='x',y='y',source=source, line_color='blue', line_width = 5)
+    #sent = "neutral"
 
-    for a in range(len(df2.date_time)):
-            view = CDSView(source=source, filters=[IndexFilter([a])])
-            if source.data['z'][a] > 0.1:
-                sent="positive"
-                plot.circle(source.data['x'][a],source.data['y'][a], source=source,view=view, fill_color='green', size=50)
-            elif source.data['z'][a] < -0.1:
-                sent="negative"
-                plot.circle(source.data['x'][a],source.data['y'][a], source=source, view=view,fill_color='red', size=50)
-            else:
-                sent="neutral"
-                plot.circle(source.data['x'][a],source.data['y'][a], source=source, view=view,fill_color='blue', size=50)
+    for a in range(len(part.date_time)):
+        view = CDSView(source=source, filters=[IndexFilter([a])])
+        if source.data['z'][a] > 0.1:
+            sent="positive"
+            plot.circle(source.data['x'][a],source.data['y'][a], source=source,view=view, fill_color='green', size=50)
+        elif source.data['z'][a] < -0.1:
+            sent="negative"
+            plot.circle(source.data['x'][a],source.data['y'][a], source=source, view=view,fill_color='red', size=50)
+        else:
+            sent="neutral"
+            plot.circle(source.data['x'][a],source.data['y'][a], source=source, view=view,fill_color='blue', size=50)
 
     hover = HoverTool()
     hover.tooltips=[
-        ('Average sentiment', '@z'),
-        ('Exact price', '@y'),
-        ('most_neg_twt', '@a')
+        ('Average sentiment', sent),
+        ('Exact price', '@y')
     ]
     plot.add_tools(hover)
-
 
     script1, div1 = components(plot)
     cdn_js = CDN.js_files #cdn_js[0] only need this link
@@ -78,7 +71,7 @@ def comp_selector():
 @app.route('/login',methods=['GET','POST'])
 def logins():
     form = LoginForm()
-    if form.validate_on_submit(): #validates data entered into login form
+    if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
@@ -91,9 +84,9 @@ def logins():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')#hashes password
-        user = User(username=form.username.data, email=form.email.data, password=hashed_password)#creates a User 
-        db.session.add(user)# adds user into the database
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user = User(username=form.username.data, email=form.email.data, password=hashed_password)
+        db.session.add(user)
         db.session.commit()
         flash(f'Your account has been created! You are now able to log in','success')
         return redirect(url_for('logins'))
